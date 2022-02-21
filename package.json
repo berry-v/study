@@ -1,0 +1,20 @@
+{
+  "name": "vue-study",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --config build/webpack.config.js",
+    "start": "webpack-dev-server --config build/webpack.config.js"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "^4.0.0",
+    "html-webpack-plugin": "^5.5.0",
+    "webpack": "^5.48.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

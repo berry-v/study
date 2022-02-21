@@ -1,0 +1,22 @@
+虚拟DOM 把dom数据化
+主流: snabbdom virtual-dom
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+src
+    compiler: 编译器
+    core: 核心
+    platforms: 平台
