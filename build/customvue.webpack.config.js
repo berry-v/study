@@ -3,7 +3,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
     entry: {
-        index: path.join(__dirname, '../src/index.js')
+        index: path.join(__dirname, '../src/customvue/index.js')
     },
     output: {
         filename: '[name].js',
@@ -15,7 +15,7 @@ module.exports = {
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             // chunks: 'dist/js/index',
-            template: './index.html',
+            template: './src/customvue/index.html',
             filename: path.resolve(__dirname, 'dist/index.html')
         })
     ],

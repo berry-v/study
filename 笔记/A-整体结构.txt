@@ -1,0 +1,95 @@
+css、语法 、 框架、框架原理、性能优化 等
+框架原理、网络安全、算法(*)、项目设计&工程化(*)、自己做过的项目经历等
+
+面试题顺序
+阿里-腾讯-百度-滴滴-头条-快手-美团-别的
+
+需要的技能
+
+基础:  css、正则(不是很重要)、BOM、DOM、 闭包、this、节流去抖、数组方法
+	debounce/throttle
+	this 四个原则
+
+语言: ES6、TS、各类DSL
+	Promise(背)     async/await/const(建议babel变异之后看源码， 暂时不用)    proxy->babel
+	TS->重载(Vue3.0)、泛型(可以看一下)
+
+框架: React、Vue、Angular
+	用法: HOC(@decorators)/render-props/生命周期
+	Vue: 双向绑定(defineProperty get set.... (数组不能代理咋整)/pop/push)
+	vue/react vdom: DFS 复杂  (diff(oldVnode, newVnode)){patch()}
+	路由 vue-router、react-router(hash、pushState) onpopstate\onhashchange
+	数据流框架: redux(*)/mobx/vuex(希望手写)
+	react -  fiber架构的实现
+	跨度按框架(weex / uniapp)
+
+服务端: Node.js、中间件 (不是很重要)
+	登陆、存储、并发、缓存，中间件
+
+融合开发: Hybrid、React-Native、小程序、nw、electron (jssdk比如微信的SDK) (不是很重要)
+
+工程化(*): xxx-cli、webpack、eslint、NPM、单测试、流水线
+	前端工程化->webpack->loader/plugin 规约一些通用的小功能(*)
+	npm->package.json
+
+基础技能(*): 设计模式、算法、性能优化、网络
+	网络(*): http: 缓存系列
+		Cache-Control, expire ---- 200 (在客户端拦死)
+		Etag+ last-modify ---- 304(会向服务端发起)
+		cookies: cookies/set-cookie
+		location
+		transfer-encoding: bigpipe(facebook)
+	性能优化(*)
+		react.memo ->react-router
+		动态lazy加载组件的技术， code split, react.lazy、动态组件 (官网仔细看完就行)
+		ssr, 用得少(降级)(在检测到某一个QPS量级时候， 退化为普通的前端)
+	算法(*) zog pog letcode
+		动态规划
+			const dp = arr =>{
+				let res = [].concat(arr)
+				let arrLen = arr.length
+				for(let i = 0; i<arrLen; i++){
+					for(let j = 0; j<arrLen; j++){
+						if(arr[i] (>或<) arr[i-j] + xxx){
+							arr[i] = 重新赋值
+						}
+					}
+				}
+			}
+		搜索算法
+			dfs
+			const dfs = arr => {
+				if(shot(xx)){
+					return xxx
+				}
+				if(judge(xxx)){
+					// 递归
+					dfs()
+				}
+			}
+			const bfs = () => {
+				while(queueu.length){
+					const point = queueu.shift();
+					for(可达 in point){
+						queueu.push(point)
+					}
+					if(shot (可达)){
+						return 可达
+					}
+				}
+			}
+		排序
+
+
+图形: SVG / Canvas (不是很重要)
+		
+软技能: 技术方面、文档、调研、推动能力(暂时不是很重要， 更高时重要)
+
+编码能力: 风格与最佳实践，如函数式等(面试时不一定会体现，工作中绝对能体现)
+          函数式->纯函数/全局、局部变量
+	
+准备好一些做好的xxx-loader或者xxx库，比较适合做中台类型项目
+准备一些runtime插件， 比如做一个UBB的JS-parser,还能兼容世贸的rn/flutter/小程序等
+针对nodejs做一些中间件、比如登录业务、内部业务等
+
+

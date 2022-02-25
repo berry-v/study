@@ -30,6 +30,7 @@ class Vue {
         for (let key in this.$data) {
             let value = this.$data[key]
             let that = this
+            console.log(this)
             Object.defineProperty(this.$data, key, {
                 get(){
                     return value

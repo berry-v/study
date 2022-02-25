@@ -1,0 +1,292 @@
+requestAnimationFrame
+
+
+
+
+
+源码中有很多的思想， 如果你不去看， 在开发中是想不到的， 能够将好的框架的思想运用到日常的项目中， 才是最大的提升
+
+丰富的选项合并策略
+new Vue是云星Vue框架的第一步， Vue作为构造器， 实例化阶段的第一步是执行初始化过程， 而选项合并是初始化的开始， 我们会新构造其中传递各种类型的可配置选项， 例如data, props, 或者都想mounted这类生命周期钩子， 而除了这些用户自定义的选项， vue还提供了很多内部选项， 这些选项遵循什么样的合并规则就是分析的重点
+
+	Vue构造器
+	打包后的源码是遵从UMD规范的，它是commonjs和amd的整合。而Vue的本质是一个构造器,并且它保证了只能通过new实例的形式去调用，而不能直接通过函数的形式使用。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+基础的数据代理
+Vue的核心是它的响应式系统， 而响应式系统的核心是利用了Object.defineProperty 进行数据拦截， 深入分析Vue中两种数据拦截的方式， Object,defineProperty,Proxy 尽管响应式系统用的是兼容性更好的Object.defineProperty, 但是proxy也在源码中使用删了的， 其中的一个例子就是用作数据过滤筛选
+
+
+完整挂载流程和模板编译
+
+完整渲染流程
+Virtual DOM 是js 操作和DOM渲染之间的桥梁， JS对DOM节点的操作， 都会批量反应到Virtual DOM 这个节点描述对象上， 它的理念很大程度提高了渲染的性能， 分析两个挂在阶段核心过程， render update , render阶段会将模板编译渲染函数解析成virtual DOM树， update阶段会将Virtual DOM树映射为真实的DOM节点
+
+组件基础剖析
+组件Vue另一个核心， 组件化开发是衡量Vue开发能力的标准， 从组件的注册开始，介绍全局注册和局部注册在实现原理上的区别， 另外， 组建的瓜子流程也是分析的重点， 这一切都依赖于渲染流程
+
+组件的高级用法
+除了基础组件用法， Vue还提供了高级用法， 例如异步组件和函数组件， 异步组件是首屏性能优化的解决方案， 深入它的实现原理， 更有助于我们在开发中首屏性能问题， 而函数式组件也有其独特的实用场景
+
+深入响应式系统构建
+响应式系统构建是vue的核心， 也是难点， 从响应式数据的构建， 再到每种数据类型依赖收集和派发更新的分析， 尝试模拟一个简易版的响应式系统， 方百姓封神层次源码分析， 在响应式系统构建中， 还有很多的特殊情况需要考虑， 例如数组的响应式构建， 对象的异常处理等
+
+diff算法的实现
+Virtual DOM引入的另一个关键是在旧节点发生改变时， 利用diff算法比较新旧节点的差异， 以达到最小变化的改变真实节点， 尝试脱离框架实现一个diff算法
+
+揭秘Vue的事件机制
+Vue痛了很多实用的功能给用户， 其中一个就是使用模板去进行时间监听， @click作为事件指令， 会在模板编译阶段， 并且会在真实节点的渲染阶段进行相关的事件绑定。 而对于组件的事件而言， 他提供了子父组件的通信方式， 本质上是在同个子组件内部维护了一个事件总线
+
+你想了解的Vue插槽
+Vue组件的另一个重要概念是插槽， 他允许你以一种不同于严格的父子关系的方式组合组件， 插槽为你提供了一个将内容放置到新位置或组件更通用的出口， 围绕官网对插槽内容的介绍思路， 按照普通插槽， 具名插槽， 再到作用域插槽的思路， 逐步深入内部的实现原理
+
+v-model 的语法糖
+我们都知道v-model是实现双向数据绑定的核心， 但如果深入源码， 我们可以知道， v-model的核心知识通过事件触发去改变表单的值， 除此之前，v-model语法糖还在朱河输入过程中做了一系列的优化。另外组件上使用v-model本质上只是一个字符组件通信的语法糖。
+
+动态组件的深入分析
+动态组件是我们平时开发中高频率使用的东西， 核心是is属性的使用， 文末还粗略介绍了另一个概念， 动态组件
+
+keep-alive的魔法
+内置组件中最重要也是最经常使用的是keep-alive组件， 我们将keep-alive配合动态组件is使用， 达到在切换组件的同事，将旧组件进行缓存，以便保留初始状态的目的 keep-alive有不同于其他组件的生命周期， 并且他在缓存上也做了优化
+
+
+
+
+
+
+CommonJs,AMD, CMD, UMD
+
+目前，通行的Javascript模块规范共有两种: CommonJS和AMD
+
+CommonJS 
+在CommonJS中， 有一个全局性方法require(), 用于加载模块， 既定有一个数学模块math.js， 就可以像下面这样加载: 
+const math = require('math')
+math.add(2, 3)
+
+AMD (Asynchronous Module Definition,  异步模块定义) 
+采用异步方式加载模块， 模块的加载不影响它后面语句的运行。所有依赖这个模块的语句， 都定义在一个毁掉函数中， 等到加载完成之后， 这个回调函数才会运行。 AMD也采用require()语句加载模块， 但不同于CommonJS , 它要求两个参数:  require([module], callback);
+第一个参数是[module], 是一个数组， 里边的成员是要加载的模块， 第二个参数书callback, 则是加载成功之后的回调函数
+require.js和curl.js实现了AMD规范
+为什么要用require.js?
+最早的时候所有JavaScript都是写在一个文件里边， 只要加载这一个文件就够了， 后来代码越来越多， 一个文件不够了， 必须分成多个文件， 依次加载，但是依次多个js文件的写法， 也有很大的缺点， 首先， 加载的时候， 浏览器会停止网页渲染， 加载的文件越多， 网页失去响应的时间就回越长， 其次， 由于js文件之间存在依赖关系， 因此必须严格保证加载顺序， 依赖性最大的模块一定要放到最后加载， 当依赖关系很复杂的时候， 代码的编写和维护会变得困难， require.js的诞生就是为了解决这两个问题: 
+1)实现js文件的异步加载， 避免网页失去响应；
+2)管理模块之间的依赖性， 便于代码的编写和维护；
+
+CMD(Common Module Definition， 通用模块定义)
+AMD虽然实现了异步加载， 但是开始就把所有依赖写出来是不符合书写的逻辑顺序的， 能不能像commonJS那样， 用的时候再require, 而且还支持异步加载后在执行呢， CMD是seajs推崇的规范， CMD则是依赖就近， 用的时候再require， 他写起来是这样的
+define(function(require, exports, module){
+    const clock = require('clock')
+    clock.start()
+})
+
+AMD和CMD最大的区别是对依赖模块的执行时机处理不同，而不是加载的时机或者方式不同， 二者皆为异步加载模块。
+AMD依赖前置， js可以方便知道依赖模块是谁， 立即加载；
+而CMD就近依赖， 需要使用包块变为字符串解析一遍才知道依赖了那些模块， 这也是很多人诟病CMD的一点，牺牲性能带来开打的便利性， 实际上解析模块用的时间短到可以忽略。
+
+UMD
+UMD是AMD和CommonJS的糅合。AMD模块以浏览器第一的原则发展，异步加载模块。CommonJS模块以服务器第一原则发展，选择同步加载，它的模块无需包装(unwrapped modules)。这迫使人们又想出另一个更通用的模式UMD (Universal Module Definition)。希望解决跨平台的解决方案。
+UMD先判断是否支持Node.js的模块(exports)是否存在，存在则使用Node.js模块模式。在判断是否支持AMD(define是否存在)，存在则使用AMD方式加载模块。
+(function (window, factory) {
+    if (typeof exports === 'object') {
+        module.exports = factory();
+    } else if (typeof define === 'function' && define.amd) {
+        define(factory);
+    } else {
+        window.eventUtil = factory();
+    }
+})(this, function () {
+    //module ...
+});
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD
+        define(['jquery', 'underscore'], factory);
+    } else if (typeof exports === 'object') {
+        // Node, CommonJS之类的
+        module.exports = factory(require('jquery'), require('underscore'));
+    } else {
+        // 浏览器全局变量(root 即 window)
+        root.returnExports = factory(root.jQuery, root._);
+    }
+}(this, function ($, _) {
+    // 方法
+    function a(){};    // 私有方法，因为它没被返回 (见下面)
+    function b(){};    // 公共方法，因为被返回了
+    function c(){};    // 公共方法，因为被返回了
+
+    // 暴露公共方法
+    return {
+        b: b,
+        c: c
+    }
+}));
+CommonJS团队定义了module格式来解决JavaScript作用域问题，这样确保了每一个module都在自己的命名空间下执行。根据CommonJS的规范，每个文件就是一个模块，有自己的作用域。在一个文件里面定义的变量、函数、类，都是私有的，对其他文件不可见。CommonJS规范规定，每个模块内部，module变量代表当前模块。这个变量是一个对象，它的exports属性(即module.exports)是对外的接口。加载某个模块，其实是加载该模块的module.exports属性。CommonJS给出2个工具来实现模块之间的依赖: 
+require() 用于在当前作用域引入已有的模块
+module object 用于从当前作用域导出一些东东
+
+// salute.js 
+var MySalute = "Hello";
+module.exports = MySalute;
+
+// world.js
+var MySalute = require("./salute");
+var Result = MySalute + " world!";
+console.log(Result);
+
+
+https://blog.csdn.net/cc18868876837/article/details/81211729
+prototype、__proto__与constructor
+
+__proto__
+__proto__是对象所独有的，__proto__属性都是由一个对象指向一个对象，即指向它们的原型对象(也可以理解为父对象)
+作用就是当访问一个对象的属性时，如果该对象内部不存在这个属性，那么就会去它的__proto__属性所指向的那个对象(可以理解为父对象)里找，如果父对象也不存在这个属性，则继续往父对象的__proto__属性所指向的那个对象(可以理解为爷爷对象)里找，如果还没找到，则继续往上找…直到原型链顶端null，再往上找就相当于在null上取值，会报错， null为原型链的终点，由以上这种通过__proto__属性来连接对象直到null的一条链即为我们所谓的原型链。
+其实我们平时调用的字符串方法、数组方法、对象方法、函数方法等都是靠__proto__继承而来的。
+
+prototype
+prototype它的含义是函数的原型对象，也就是这个函数(其实所有函数都可以作为构造函数)所创建的实例的原型对象
+作用就是包含可以由特定类型的所有实例共享的属性和方法，也就是让该函数所实例化的对象们都可以找到公用的属性和方法。任何函数在创建的时候，其实会默认同时创建该函数的prototype对象。
+
+constructor
+constructor属性也是对象才拥有的，它是从一个对象指向一个函数，含义就是指向该对象的构造函数，每个对象都有构造函数(本身拥有或继承而来)
+Function这个对象比较特殊，它的构造函数就是它自己(因为Function可以看成是一个函数，也可以是一个对象)，所有函数和对象最终都是由Function构造函数得来，所以constructor属性的终点就是Function这个函数。
+
+每个对象都有构造函数， 每个对象都可以找到其对应的constructor，因为创建对象的前提是需要有constructor，而这个constructor可能是对象自己本身显式定义的或者通过__proto__在原型链中找到的。而单从constructor这个属性来讲，只有prototype对象才有。每个函数在创建的时候，JS会同时创建一个该函数对应的prototype对象，而函数创建的对象.__proto__ === 该函数.prototype，该函数.prototype.constructor===该函数本身，故通过函数创建的对象即使自己没有constructor属性，它也能通过__proto__找到对应的constructor，所以任何对象最终都可以找到其构造函数(null如果当成对象的话，将null除外)
+
+总结一下: 
+1. ①__proto__和constructor属性是对象所独有的；
+    ② prototype属性是函数所独有的，因为函数也是一种对象，所以函数也拥有__proto__和constructor属性。
+2.__proto__属性的作用就是当访问一个对象的属性时，如果该对象内部不存在这个属性，那么就会去它的__proto__属性所指向的那个对象(父对象)里找，一直找，直到__proto__属性的终点null，再往上找就相当于在null上取值，会报错。通过__proto__属性将对象连接起来的这条链路即我们所谓的原型链。
+3.prototype属性的作用就是让该函数所实例化的对象们都可以找到公用的属性和方法，即f1.__proto__ === Foo.prototype。
+4.constructor属性的含义就是指向该对象的构造函数，所有函数(此时看成对象了)最终的构造函数都指向Function。
+
+
+
+new 操作符
+new 操作符将函数作为构造器进行调用的过程: 函数调用， 然后创建一个对象， 并且成了函数的上下文(也就是此时函数内部的this指向该新创建的对象， 这意味着我们可以在构造器函数内部通过this参数初始化值)， 最后返回该新对象的引用
+
+
+this 指向
+
+
+
+
+ES6 块级作用域{}
+
+
+
+
+高阶函数
+
+
+
+css、语法 、 框架、框架原理、性能优化 等
+框架原理、网络安全、算法(*)、项目设计&工程化(*)、自己做过的项目经历等
+
+面试题顺序
+阿里-腾讯-百度-滴滴-头条-快手-美团-别的
+
+需要的技能
+
+基础:  css、正则(不是很重要)、BOM、DOM、 闭包、this、节流去抖、数组方法
+	debounce/throttle
+	this 四个原则
+
+语言: ES6、TS、各类DSL
+	Promise(背)     async/await/const(建议babel变异之后看源码， 暂时不用)    proxy->babel
+	TS->重载(Vue3.0)、泛型(可以看一下)
+
+框架: React、Vue、Angular
+	用法: HOC(@decorators)/render-props/生命周期
+	Vue: 双向绑定(defineProperty get set.... (数组不能代理咋整)/pop/push)
+	vue/react vdom: DFS 复杂  (diff(oldVnode, newVnode)){patch()}
+	路由 vue-router、react-router(hash、pushState) onpopstate\onhashchange
+	数据流框架: redux(*)/mobx/vuex(希望手写)
+	react -  fiber架构的实现
+	跨度按框架(weex / uniapp)
+
+服务端: Node.js、中间件 (不是很重要)
+	登陆、存储、并发、缓存，中间件
+
+融合开发: Hybrid、React-Native、小程序、nw、electron (jssdk比如微信的SDK) (不是很重要)
+
+工程化(*): xxx-cli、webpack、eslint、NPM、单测试、流水线
+	前端工程化->webpack->loader/plugin 规约一些通用的小功能(*)
+	npm->package.json
+
+基础技能(*): 设计模式、算法、性能优化、网络
+	网络(*): http: 缓存系列
+		Cache-Control, expire ---- 200 (在客户端拦死)
+		Etag+ last-modify ---- 304(会向服务端发起)
+		cookies: cookies/set-cookie
+		location
+		transfer-encoding: bigpipe(facebook)
+	性能优化(*)
+		react.memo ->react-router
+		动态lazy加载组件的技术， code split, react.lazy、动态组件 (官网仔细看完就行)
+		ssr, 用得少(降级)(在检测到某一个QPS量级时候， 退化为普通的前端)
+	算法(*) zog pog letcode
+		动态规划
+			const dp = arr =>{
+				let res = [].concat(arr)
+				let arrLen = arr.length
+				for(let i = 0; i<arrLen; i++){
+					for(let j = 0; j<arrLen; j++){
+						if(arr[i] (>或<) arr[i-j] + xxx){
+							arr[i] = 重新赋值
+						}
+					}
+				}
+			}
+		搜索算法
+			dfs
+			const dfs = arr => {
+				if(shot(xx)){
+					return xxx
+				}
+				if(judge(xxx)){
+					// 递归
+					dfs()
+				}
+			}
+			const bfs = () => {
+				while(queueu.length){
+					const point = queueu.shift();
+					for(可达 in point){
+						queueu.push(point)
+					}
+					if(shot (可达)){
+						return 可达
+					}
+				}
+			}
+		排序
+
+
+图形: SVG / Canvas (不是很重要)
+		
+软技能: 技术方面、文档、调研、推动能力(暂时不是很重要， 更高时重要)
+
+编码能力: 风格与最佳实践，如函数式等(面试时不一定会体现，工作中绝对能体现)
+            函数式->纯函数/全局、局部变量
+	
+准备好一些做好的xxx-loader或者xxx库，比较适合做中台类型项目
+准备一些runtime插件， 比如做一个UBB的JS-parser,还能兼容世贸的rn/flutter/小程序等
+针对nodejs做一些中间件、比如登录业务、内部业务等
+
+

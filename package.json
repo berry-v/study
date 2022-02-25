@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --config build/webpack.config.js",
-    "start": "webpack-dev-server --config build/webpack.config.js"
+    "custom:dev": "webpack --config build/custom.webpack.config.js",
+    "custom:start": "webpack-dev-server --config build/custom.webpack.config.js",
+    "start": "webpack-dev-server --config build/customvue.webpack.config.js"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^4.0.0",
@@ -13,6 +14,9 @@
     "webpack": "^5.48.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "vue": "^2.6.14"
   },
   "keywords": [],
   "author": "",
