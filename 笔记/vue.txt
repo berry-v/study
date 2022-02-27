@@ -2,21 +2,21 @@
 主流: snabbdom virtual-dom
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+https://ustbhuangyi.github.io/vue-analysis/
 
 
 src
-    compiler: 编译器
+    compiler: template->render function
     core: 核心
     platforms: 平台
+    server: 
+    sfc:
+    shared:
+
+
+
+
+慕课网 vue源码分析 笔记
+flow vue源码利用flow做了静态资源类型检查
+
+

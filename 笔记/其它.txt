@@ -2,6 +2,179 @@ requestAnimationFrame
 
 
 
+常见的跨域方式有哪些：
+同源策略：域名、端口、协议相同， 就是同源的， 如果一个不同， 则不同源， 有跨域问题
+跨域：违反同源规则
+常见方式
+	1、jsonp 利用 html 中的 script src 属性来获取其他源的数据
+		<script>
+			function getData(res){
+				console.log(res)
+			}
+		</script>
+		<script src="文件？callback=getData">
+	2、 cors 跨域资源共享， 支持所有浏览器 ie9+
+		XMLHttpRequest 发送请求的时候，如果不同源， header{Origin}
+		后台处理： Access-control-allow-origin
+	3、 h5 中的 widow.postMessage 处理跨域 主流浏览器 ie8+
+		window.postMessage("字符串", "*")
+
+	注意： vue中的跨域：代理proxy  本质上cors跨域
+		vue.config.js
+			proxy: {
+				target:
+				changeOrigin:
+				pathRewrite:
+			}
+
+async和await区别：
+	async 是用来定义函数的， 是异步函数。 如果打印函数名，会得到一个promise 可以用函数名称去调用then方法
+	await 后边是任意表达式， 一般使用promise的表达式
+	async 内部实现， 有返回值Promise.resolve()  出错promise.reject()  返回promise对象 用catch捕获
+	await 等待后边的promise对象执行完毕， 拿到了promise.resolve()的值，再执行后边的代码
+	await 只能写在async函数里边
+
+	优点： await 和 async属于ES7(未来的趋势， 一定是异步函数使用多一些) 编写方便， 提高程序效率， 避免回调地狱
+	补充： promise 和async await区别
+		promise ES6
+		promise 中包含catch async 需要自己定义catch
+		promise 提供方法多一些， 比如all race
+
+
+对mvvm的理解
+	mvvm model view viewmodel mvc的改进
+	m:model 模型：数据访问(ajax， axios, fetch) 主要是用来访问和数据处理的
+	v:view 视图层：结构布局外观(html css h5 c3 响应式)
+	vm:viewmodel 公共属性和命令 mvvm没有控制器， 有一个绑定器，在视图和模型之间建立通信
+
+	总的来说， 是将结构布局和业务逻辑分开， 通过viewmodel在结构布局和业务逻辑之间进行通信
+	优势： 
+		低耦合 (视图层和数据层分开)
+		可重用性高
+		分层开发，便于维护
+
+
+
+v-for 为什么要有key
+	key可以提高虚拟DOM的更新效率
+	在VUE中默认"就地复用"策略， 在dom操作的时候， 如果没有key会造成混乱
+
+
+为什么typeof null 结果是 object
+	typeof null 输出object 其实是一个底层错误， 但直到现阶段都无法被修复
+	原因是， 在javascript初始版本中， 值以32位存储， 前三位表示数据类型标记，其余位则是值。对于所有的对象，他的前3位都已000作为类型标记位， 在javascript早期版本中，null被认为是一个特殊的值， 用来对应C中的空指针，但javaScript中没有C中的指针， 所以null意味着什么都没有， 或者void并以全0（32个）表示。
+	因此每当javascript读取null时，它前端的3位将它视为对象类型， 这也是为什么typeof null 返回 object 的原因
+
+打包之后 dist目录过大 该如何解决
+	1、dist/生成.map 这个是不必要的， 在webpack中配置productionSourceMap:false
+	2、组件和路由懒加载
+	3、常用插件， 使用外部链接方式<script src=".....">(个人觉得不太建议， 有风险， 过于依赖外部网站)
+	4、对于文件和图片、压缩一下（可能会导致图片不清晰等问题）
+		compression-webpack-plugin
+		导入：
+		最小化代码配置 minisize(true)
+		分割代码：splitChunksl
+		超过限定值的文件进行压缩
+			threshold: 文件大小(字节为单位)
+
+
+有了for循环， 为什么还要forEach
+	本质区别
+		foreach 是一个迭代器， for是一个简单的遍历
+
+	for和forEach的中断
+		在js中有return break continue对函数进行中断或跳出循环操作
+		我们在for循环中会用到一些中断行为， 对于优化数组遍历查找是很好的
+		但是由于forEach属于迭代器， 只能按序依次遍历完成， 所以不支持上诉行为
+		在foreach中break会报错， return会继续循环， continue 会报错
+	foreach删除自身元素， index不可被重置
+		在foreach中我们无法控制index的值， 他只会在无脑的自增值直至大于数组的length跳出循环， 所以他无法删除自身进行index重置
+	forEach 的循环起点只能为0不能进行人为干预， 而for循环不同
+
+	for循环和forEach的区别
+		性能比较： for > forEach > map
+		for循环比forEach快一倍， forEach比map快20%左右
+		原因分析
+		for: for循环没有额外的函数调用栈和上下文， 所以他的视线最为简单
+		forEach: 对于forEach来说， 它的函数签名中包含了参数和上下文(比如forEach的数据处理函数)， 所以性能会低于for循环
+		map: map最慢的原因是因为map会返回一个新的数组， 数组的创建和复制会导致分配内存空间， 因此会带来较大的性能开销
+
+什么时候适合用Map，什么时候适合用Object
+	Map
+	1.、接受任何类型的键， 注意是任何类型, 除了NaN比较特殊外。 其他Map的get方法都是通过对比键名是否相等（===）来获取， 不相等则返回undefined.
+		虽然NaN !==  NaN 但是作为Map的键值并无区别
+	2、键名的类型
+		Map支持正则作为键名， 这在Object中是不被允许的， 会直接报错
+	3、迭代器
+		Map是可迭代，可直接进行迭代， 例如forEach循环或者for...of...循环
+		但是对于Object是不能直接迭代的， 当你尝试迭代将导致报错
+	4、元素顺序和长度
+		Map 保持对长度的跟踪，使其能够在0(1)复杂度中进行访问
+		Object 想要获得对象的属性长度,需要手动对其进行迭代,使其为0(n)复杂度,属性长度为n
+		Map 始终保持按插入顺序返回键名来
+		Object 却不是,从ES6开始, String和 Symbo键是按顺序保存起来的, 但是通过隐式转换保存成String的键就是乱序的
+
+	5、 Object/Map何为最佳实践
+		1.当插入顺序是你解决问题时需要考虑的,并且当前需要使用除 String和 Symbol以外的键名时那么Map就是个最佳解决方案
+		2.如果需要遍历键值对(并且需要考虑顺序),还是需要优先考虑Map
+		3.Map在频繁增删键值对的场景下表现更好,性能更高
+		4.再举一个实际的例子,比如有一个自定义字段的用户操作功能,用户可以通过表单自定义字段米那么这时候最好是使用Map,因为很有可能会破坏原有的对象
+
+javaScript闭包 (集合作用域、作用域链来看)
+	闭包，简单的来说就是指有权限访问另一个函数作用域中变量的函数。
+	外部函数调用之后其变量对象本应该被销毁，但闭包的存在使我们仍然可以访问外部函数的变量对象。创建闭包最常见方式，就是在一个函数内部创建另一个函数。
+	闭包的作用域链包含着它自己的作用域，以及包含它的函数的作用域和全局作用域
+	通常，函数的作用域及其所有变量都会在函数执行结束后被销毁, 内存也会被回收。但是，在创建了一个闭包以后，这个函数的作用域就会一直保存到闭包不存在为止。
+	应用闭包的主要场合是
+		设计私有的方法和变量。
+		任何在函数中定义的变量，都可以认为是私有变量，因为不能在函数外部访问这些变量。私有变量包括函数的参数、局部变量和函数内定义的其他函数。
+	运用闭包的关键
+		闭包引用外部函数变量对象中的值；
+		在外部函数的外部调用闭包。
+	闭包的缺陷
+		闭包的缺点就是常驻内存会增大内存使用量，并且使用不当很容易造成内存泄露。
+		如果不是因为某些特殊任务而需要闭包，在没有必要的情况下，在其它函数中创建函数是不明智的，因为闭包对脚本性能具有负面影响，包括处理速度和内存消耗。
+
+防抖、节流（一样的逻辑）
+	防抖：用户操作过于频繁、只要最后一次事件的操作
+		利用计时器、闭包来实现一个防抖
+		比如：function debounce(fn, delay){
+				let t = null
+				return function(){
+					if(t){
+						clearTimeout(t)
+					}else{
+						t= setTimeout(()=>{
+							fn.call(this)
+						}, delay)
+					}
+				}
+		}
+	节流：控制执行次数
+		作用： 控制高频事件执行次数
+		比如： let flag = true
+			window.onscroll = function(){
+				if(flag){
+					setTimeout(()=>{
+						console.log('hello world')
+					}, 500)
+				}
+				flag = false
+			}
+
+call、apply、bind
+	call是一个函数的方法
+	call可以调用函数， 可以改变函数中this的指向
+			fun.call(cat)
+	call和bind使用一样
+	call和apply使用不一样
+	call会调用函数， bind不会调用函数
+	
+
+
+
+原型、原型链
+
 
 
 源码中有很多的思想， 如果你不去看， 在开发中是想不到的， 能够将好的框架的思想运用到日常的项目中， 才是最大的提升
@@ -11,20 +184,6 @@ new Vue是云星Vue框架的第一步， Vue作为构造器， 实例化阶段�
 
 	Vue构造器
 	打包后的源码是遵从UMD规范的，它是commonjs和amd的整合。而Vue的本质是一个构造器,并且它保证了只能通过new实例的形式去调用，而不能直接通过函数的形式使用。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

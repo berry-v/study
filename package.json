@@ -6,7 +6,7 @@
   "scripts": {
     "custom:dev": "webpack --config build/custom.webpack.config.js",
     "custom:start": "webpack-dev-server --config build/custom.webpack.config.js",
-    "start": "webpack-dev-server --config build/customvue.webpack.config.js"
+    "vue:start": "webpack-dev-server --config build/customvue.webpack.config.js"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^4.0.0",
