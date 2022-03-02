@@ -1,3 +1,20 @@
+// promise
+import Promise from './promise/index.js'
+
+let promise = new Promise((resolve, reject)=>{
+    setTimeout(()=>{
+        // reject('失败')
+        resolve('成功')
+    }, 300)
+})
+
+promise.then((data) => { // 有两个参数， 成功的、失败的
+    console.log('success', data)
+}, (error) => {
+    console.log('error', error)
+})
+
+
 let Vue = require('./vue/vue.js') 
 
 new Vue({
