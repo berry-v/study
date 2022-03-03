@@ -83,20 +83,27 @@ const PENDING = 'PENDING' // 默认状态
 const FULFILLED  = 'FULFILLED' // 成功
 const REJECT = 'REJECT' // 失败
 class Promise{
+    // 构造方法接收一个回调
     constructor(exector){ // 初始化
-        // 初始状态 pending
-        this.state = PENDING
+        this.state = PENDING // 初始状态 pending
         this.successData = undefined // 保存成功的数据
         this.errorData = undefined // 保存失败的信息
-        this.resolveList =  [] // 收集获取成功数据的方法
-        this.rejectList =  [] // 收集获取失败数据的方法
+        this.resolveList =  [] // 收集获取成功数据的方法, 成功队列
+        this.rejectList =  [] // 收集获取失败数据的方法, 失败队列
         // new Promise 执行
         // 改变状态
+        // 由于resolve/reject是在executor内部被调用, 因此需要使用箭头函数固定this指向
         const resolve = (value) => {
-            if(this.state === PENDING){
+            if(this.state === PENDING){ // 状态只能由pending到fulfilled或rejected
                 this.successData = value
-                this.state = FULFILLED
+                this.state = FULFILLED // 变更状态
                 this.resolveList.forEach(fn=>fn())
+                // this.resolveList.forEach(fn=>fn()) 看到另一种写法是
+                // while(this.resolveList.length) { // 这里之所以使用一个队列来储存回调,是为了实现规范要求的 "then 方法可以被同一个 promise 调用多次" 如果使用一个变量而非队列来储存回调,那么即使多次p1.then()也只会执行一次回调
+                //     const callback = this.resolveList.shift()
+                //     callback(value)
+                // }
+                
             }
         }
         const reject = (error) => {

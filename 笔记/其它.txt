@@ -1,5 +1,5 @@
 requestAnimationFrame
-
+微任务、宏任务队列
 
 
 常见的跨域方式有哪些：

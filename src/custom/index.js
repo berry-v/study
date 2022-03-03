@@ -13,6 +13,12 @@ promise.then((data) => { // 有两个参数， 成功的、失败的
 }, (error) => {
     console.log('error', error)
 })
+// promise.then 可以被调用多次
+promise.then((data) => {
+    console.log('success111', data)
+}, (error) => {
+    console.log('error111', error)
+})
 
 
 let Vue = require('./vue/vue.js') 

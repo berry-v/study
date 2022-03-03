@@ -1,0 +1,5 @@
+executor   执行人
+promise     许诺;承诺;预示;
+    Pending 等待状态
+    Fulfilled   执行状态
+    Rejected    拒绝状态
