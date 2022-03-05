@@ -1,5 +1,7 @@
-// https://juejin.cn/post/6844904096525189128#heading-12
+// https://juejin.cn/post/6844904096525189128#heading-12  完整
+// https://juejin.cn/post/6844904094079926286  二十行
 
+// 观察者模式
 
 //Promise/A+规定的三种状态
 const PENDING = 'pending'
@@ -96,14 +98,70 @@ class MyPromise {
             }
         })
     }
+
+    //catch方法其实就是执行一下then的第二个回调
+    catch (rejectFn) {
+        return this.then(undefined, rejectFn)
+    }
+
     //finally方法
     finally(callback) {
         return this.then(
-            value => MyPromise.resolve(callback()).then(() => value), // MyPromise.resolve执行回调,并在then中return结果传递给后面的Promise
+            value => MyPromise.resolve(callback()).then(() => value), //执行回调,并returnvalue传递给后面的then
             reason => MyPromise.resolve(callback()).then(() => {
                 throw reason
-            }) // reject同理
+            }) //reject同理
         )
     }
 
+    //静态的resolve方法
+    static resolve(value) {
+        if (value instanceof MyPromise) return value //根据规范, 如果参数是Promise实例, 直接return这个实例
+        return new MyPromise(resolve => resolve(value))
+    }
+
+    //静态的reject方法
+    static reject(reason) {
+        return new MyPromise((resolve, reject) => reject(reason))
+    }
+
+    //静态的all方法
+    static all(promiseArr) {
+        let index = 0
+        let result = []
+        return new MyPromise((resolve, reject) => {
+            promiseArr.forEach((p, i) => {
+                //Promise.resolve(p)用于处理传入值不为Promise的情况
+                MyPromise.resolve(p).then(
+                    val => {
+                        index++
+                        result[i] = val
+                        if (index === promiseArr.length) {
+                            resolve(result)
+                        }
+                    },
+                    err => {
+                        reject(err)
+                    }
+                )
+            })
+        })
+    }
+
+    //静态的race方法
+    static race(promiseArr) {
+        return new MyPromise((resolve, reject) => {
+            //同时执行Promise,如果有一个Promise的状态发生改变,就变更新MyPromise的状态
+            for (let p of promiseArr) {
+                MyPromise.resolve(p).then( //Promise.resolve(p)用于处理传入值不为Promise的情况
+                    value => {
+                        resolve(value) //注意这个resolve是上边new MyPromise的
+                    },
+                    err => {
+                        reject(err)
+                    }
+                )
+            }
+        })
+    }
 }

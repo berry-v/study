@@ -3,3 +3,7 @@ promise     许诺;承诺;预示;
     Pending 等待状态
     Fulfilled   执行状态
     Rejected    拒绝状态
+
+Event Loop 时间循环
+Task Queue  任务队列
+Microtask Queue 微任务队列

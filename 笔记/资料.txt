@@ -10,9 +10,6 @@ https://juejin.cn/post/6844904103504527374#heading-5
 
 https://juejin.cn/post/6844904094079926286#heading-6
 
-promise 详解
-https://juejin.cn/post/6844904096525189128#heading-12
-
 https://juejin.cn/post/6987549240436195364
 
 https://segmentfault.com/a/1190000038309852
