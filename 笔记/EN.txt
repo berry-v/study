@@ -7,3 +7,7 @@ promise     许诺;承诺;预示;
 Event Loop 时间循环
 Task Queue  任务队列
 Microtask Queue 微任务队列
+
+parse   作语法分析
+optimize    优化
+generate    生成

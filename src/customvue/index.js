@@ -40,3 +40,7 @@ new Promise((resolved, reject) => {
 }).then(res => {
     console.log(res, '$$$$$$')
 })
+
+
+
+
