@@ -25,6 +25,7 @@ let Vue = require('./vue/vue.js')
 
 new Vue({
     $el: '#main',
+    name: 'test',
     data: {
         str: '哈哈哈哈哈哈哈哈， 太搞笑啦'
     },
