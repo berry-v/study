@@ -1,5 +1,6 @@
 
 https://juejin.cn/post/6844904103504527374#heading-5
+https://ustbhuangyi.github.io/vue-analysis/v2/data-driven/update.html
 
 
 前端导航
@@ -9,6 +10,8 @@ https://adzhp.cn/
 深入剖析Vue源码
 https://book.penblog.cn/
 写给初中级前端的高级进阶指南
+
+https://www.ximalaya.com/album/3740790
 
 https://vue3js.cn/interview/vue/axiosCode.html#%E4%BA%8C%E3%80%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E6%98%93%E7%89%88axios
 
