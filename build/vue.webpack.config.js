@@ -1,6 +1,7 @@
 const path = require('path')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { VueLoaderPlugin } = require('vue-loader')
 
 function resolve (dir) {
     return path.join(__dirname, '..', dir)
@@ -21,14 +22,23 @@ module.exports = {
         ],
         extensions: ['.js', '.vue', '.json'],
         alias: {
-            // vue$: 'vue/dist/vue.esm.js',
-            vue: 'vue/dist/vue.esm.js',
-            '@': resolve('src')
+            // vue: 'vue/dist/vue.esm.js',
+            // '@': resolve('src')
+            vue: 'vue/vue.esm.js'
         }
     },
     mode: 'development',
     devtool: 'eval-source-map',
+    module: {
+        rules: [
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader'
+            }
+        ]
+    },
     plugins: [
+        new VueLoaderPlugin(),
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             // chunks: 'dist/js/index',
